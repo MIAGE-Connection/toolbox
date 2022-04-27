@@ -1,17 +1,12 @@
 
-function inject_data(input_id, container_id) {
+function inject_data(input_id, container_id, default_value) {
     input_data = document.getElementById(input_id).value
+    
+    if (input_data.length == 0)
+        input_data = default_value
+
     container_data = document.getElementById(container_id)
     container_data.innerHTML = input_data
-}
-
-function generate_signature() {
-    template = document.getElementById('sign-template')
-    inject_data('input-division', 'division')
-    inject_data('input-name', 'names')
-    inject_data('input-number', 'numbers')
-
-    document.getElementById("copy-button").style.display = 'block'
 }
 
 function add_to_clipboard(container_node) {
@@ -35,10 +30,10 @@ function copy_signature() {
         let template = document.getElementById('sign-template')
         add_to_clipboard(template)
         copy_button.setAttribute('aria-busy', false)
-        copy_button.innerHTML = '<i class="fa-solid fa-clipboard"></i> &nbsp; COPIED !'
+        copy_button.innerHTML = '<i class="fa-solid fa-clipboard-check"></i> &nbsp; COPIÉ !'
     }, 2000);
-
+    
     setTimeout(function () {
-        copy_button.innerHTML = '<i class="fa-solid fa-clipboard"></i> &nbsp; COPY !'
-    }, 7000);
+        copy_button.innerHTML = '<i class="fa-solid fa-clipboard"></i> &nbsp; COPIER'
+    }, 5000);
 }

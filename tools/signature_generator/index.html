@@ -11,10 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
 
-    <style>
-        #sign-template * {}
-    </style>
-
     <link rel="icon" type="image/x-icon" href="../../img/logo-miage-connection.png">
 
     <script src="./js/signature_generator.js"></script>
@@ -39,7 +35,7 @@
             <section>
                 <hgroup>
                     <h2>Signature Generator</h2>
-                    <h3>Generate MIAGE Connection signature for your emails.</h3>
+                    <h3>Ce petit outil permet de généner les signature de mail de MIAGE Connection.</h3>
                 </hgroup>
                 <div id="sign-template" style="margin: auto 15% auto 15%;">
                     <table style="color: #303030; font-family: 'Helvetica Neue', Roboto, sans-serif; font-size: 15px;">
@@ -75,26 +71,30 @@
                                         </tbody>
                                     </table>
                                     &nbsp;
-                                    <a href="https://www.linkedin.com/company/miage-connection/" style="color: #1155cc; text-decoration: none !important; text-decoration: none;"
+                                    <a href="https://www.linkedin.com/company/miage-connection/"
+                                        style="color: #1155cc; text-decoration: none !important; text-decoration: none;"
                                         target="_blank" rel="noopener">
                                         <img
                                             src="https://miage-connection.github.io/toolbox/tools/signature_generator/img/social/linkedin.png" />
                                     </a>
                                     &nbsp;
-                                    <a href="https://www.instagram.com/miageconnection/?hl=fr" style="color: #1155cc; text-decoration: none !important; text-decoration: none;"
+                                    <a href="https://www.instagram.com/miageconnection/?hl=fr"
+                                        style="color: #1155cc; text-decoration: none !important; text-decoration: none;"
                                         target="_blank" rel="noopener">
                                         <img
                                             src="https://miage-connection.github.io/toolbox/tools/signature_generator/img/social/instagram.png" />
                                     </a>
                                     &nbsp;
-                                    <a href="https://www.facebook.com/miageconnection/" style="color: #1155cc; text-decoration: none !important; text-decoration: none;"
+                                    <a href="https://www.facebook.com/miageconnection/"
+                                        style="color: #1155cc; text-decoration: none !important; text-decoration: none;"
                                         target="_blank" rel="noopener">
                                         <img
                                             src="https://miage-connection.github.io/toolbox/tools/signature_generator/img/social/facebook.png" />
                                     </a>
                                     &nbsp;
-                                    <a href="https://www.miage.net/" style="color: #1155cc; text-decoration: none !important; text-decoration: none;" target="_blank"
-                                        rel="noopener">
+                                    <a href="https://www.miage.net/"
+                                        style="color: #1155cc; text-decoration: none !important; text-decoration: none;"
+                                        target="_blank" rel="noopener">
                                         <img
                                             src="https://miage-connection.github.io/toolbox/tools/signature_generator/img/social/browser.png" />
                                     </a>
@@ -103,36 +103,30 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="grid">
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div>
-                        <button id="copy-button" onclick="copy_signature()"><i class="fa-solid fa-clipboard"></i> &nbsp;
-                            COPY</button>
-                    </div>
-                </div>
                 <div>
                     <label for="input-division">
-                        Division's name :
-                        <input type="text" id="input-division" name="input-division" placeholder="">
+                        Nom du pôle
+                        <input type="text" id="input-division" name="input-division" placeholder=""
+                            oninput="inject_data('input-division', 'division', 'Nom du pôle MIAGE Connection')">
                     </label>
 
                     <label for="input-name">
-                        Names :
-                        <input type="text" id="input-name" name="input-name" placeholder="">
+                        NOMS Prénoms
+                        <input type="text" id="input-name" name="input-name" placeholder=""
+                            oninput="inject_data('input-name', 'names', 'NOM Prénom')">
                     </label>
 
                     <label for="input-number">
-                        Numbers :
-                        <input type="text" id="input-number" name="input-number" placeholder="">
+                        Numéros de téléphone
+                        <input type="text" id="input-number" name="input-number" placeholder=""
+                            oninput="inject_data('input-number', 'numbers', 'Numéro de téléphone')">
                     </label>
                 </div>
                 <div class="grid">
                     <div></div>
                     <div>
-                        <button onclick="generate_signature()">CREATE</a>
+                        <button id="copy-button" onclick="copy_signature()"> <i class="fa-solid fa-clipboard"></i>
+                            &nbsp; COPIER</a>
                     </div>
                     <div></div>
                 </div>
