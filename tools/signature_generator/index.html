@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signature Generator - MIAGE Connection</title>
+    <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS.">
+
+    <!-- Pico.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+
+    <style>
+        #sign-template * {}
+    </style>
+
+    <link rel="icon" type="image/x-icon" href="../../img/logo-miage-connection.png">
+
+    <script src="./js/signature_generator.js"></script>
+</head>
+
+<body class="container-fluid">
+    <div id="layout-header">
+        <nav>
+            <ul>
+                <li><a href="../../index.html"><img id="mc-logo-header" src="../../img/logo-miage-connection.png" width="50px"></a>
+                </li>
+                <li>MIAGE Connection - Toolbox</li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="layout-content">
+        <main class="container">
+            <section>
+                <hgroup>
+                    <h2>Signature Generator</h2>
+                    <h3>Generate MIAGE Connection signature for your emails.</h3>
+                </hgroup>
+                <h3>Template :</h3>
+                <div id="sign-template" style="margin: auto 15% auto 15%;">
+                    <table style="color: #303030; font-family: 'Helvetica Neue', Roboto, sans-serif; font-size: 15px;">
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;"><img src="../../img/logo-miage-connection.png"
+                                        width="200" height="200" /></td>
+                                <td style="border-left: 3px solid #2b309b; padding-left: 20px;">
+                                    <h1 id="division"
+                                        style="font-family: 'Helvetica Neue', Roboto, serif; font-size: 23px; color: #2b309b; margin: 0;">
+                                        Nom du pôle MIAGE Connection</h1>
+                                    <h2 id="names"
+                                        style="margin: 0; font-family: 'Helvetica Neue', Roboto, serif; font-size: 18px;">NOM
+                                        Prénom</h2>
+                                    <h3 style="margin: 0; font-family: 'Helvetica Neue', Roboto, serif; font-size: 15px;">
+                                        F&eacute;d&eacute;ration nationale des &eacute;tudiants et dipl&ocirc;m&eacute;s
+                                        de MIAGE</h3>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td style="padding: 5px 0 0 0;">
+                                                    <img src="./img/social/phone-call.png" />
+                                                    &nbsp;
+                                                    <span id="numbers" style="font-size: 15px;">Numéro de téléphone</span>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    &nbsp;
+                                    <a href="https://www.linkedin.com/company/miage-connection/" style="color: #1155cc;"
+                                        target="_blank" rel="noopener">
+                                        <img src="./img/social/linkedin.png" />
+                                    </a>
+                                    &nbsp;
+                                    <a href="https://www.instagram.com/miageconnection/?hl=fr" style="color: #1155cc;"
+                                        target="_blank" rel="noopener">
+                                        <img src="./img/social/instagram.png" />
+                                    </a>
+                                    &nbsp;
+                                    <a href="https://www.facebook.com/miageconnection/" style="color: #1155cc;"
+                                        target="_blank" rel="noopener">
+                                        <img src="./img/social/facebook.png" />
+                                    </a>
+                                    &nbsp;
+                                    <a href="https://www.miage.net/" style="color: #1155cc;" target="_blank"
+                                        rel="noopener">
+                                        <img src="./img/social/browser.png" />
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="grid">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div>
+                        <button id="copy-button" onclick="copy_signature()"><i class="fa-solid fa-clipboard"></i> &nbsp; COPY</button>
+                    </div>
+                </div>
+                <div>
+                    <label for="input-division">
+                        Division's name :
+                        <input type="text" id="input-division" name="input-division" placeholder="">
+                    </label>
+
+                    <label for="input-name">
+                        Names :
+                        <input type="text" id="input-name" name="input-name" placeholder="">
+                    </label>
+
+                    <label for="input-number">
+                        Numbers :
+                        <input type="text" id="input-number" name="input-number"
+                            placeholder="">
+                    </label>
+                </div>
+                <div class="grid">
+                    <div></div>
+                    <div>
+                        <button onclick="generate_signature()">CREATE</a>
+                    </div>
+                    <div></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+
+</html>
