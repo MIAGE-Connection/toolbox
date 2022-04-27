@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signature Generator - MIAGE Connection</title>
+    <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS.">
+
+    <!-- Pico.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+
+    <link rel="icon" type="image/x-icon" href="../../img/logo-miage-connection.png">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://github.com/niklasvh/html2canvas/releases/download/0.5.0-alpha1/html2canvas.js"></script>
+
+    <script src="./js/bdr_generator.js"></script>
+
+</head>
+
+<body class="container-fluid">
+    <div id="layout-header">
+        <nav>
+            <ul>
+                <li>
+                    <a href="../../index.html"><img id="mc-logo-header" src="../../img/logo-miage-connection.png"
+                            width="50px">
+                        MIAGE Connection - Toolbox
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="layout-content">
+        <main class="container">
+            <section>
+                <hgroup>
+                    <h2>Générateur de base de remboursement</h2>
+                    <h3>Ce petit outil permet de généner la base de remboursement pour les événements de MIAGE
+                        Connection.</h3>
+                </hgroup>
+
+                <div>
+                    <label for="input-api-key">
+                        Clé API Michelin
+                        <input type="text" id="input-api-key" name="input-api-key"
+                            value="JSV2GP20220427234158912459843975$165380" />
+                    </label>
+
+                    <label for="input-cities">
+                        Villes
+                        <textarea id="input-cities" name="input-cities">
+Aix-en-provence/Marseille
+Amiens
+Talence/Bordeaux
+                        </textarea>
+                    </label>
+                </div>
+                <div id="results"></div>
+
+                <div class="grid">
+                    <div></div>
+                    <div>
+                        <button id="gen-button" onclick="generate_table()">GÉNÉRER</button>
+                    </div>
+                    <div></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+
+</html>

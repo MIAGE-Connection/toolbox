@@ -10,7 +10,6 @@ function inject_data(input_id, container_id, default_value) {
 }
 
 function add_to_clipboard(container_node) {
-
     function listener(e) {
         e.clipboardData.setData("text/html", container_node.innerHTML);
         e.preventDefault();
