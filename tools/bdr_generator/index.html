@@ -43,20 +43,27 @@
                         Connection.</h3>
                 </hgroup>
 
+                <p>Pour pouvoir utiliser cet outil, il faut que vous aillez un compte API sur le site <a
+                        href="https://api.viamichelin.fr">https://api.viamichelin.fr</a>. Après avoir créer votre compte
+                    vous allez recevoir un mail avec à l'interieur une clé qui ressemble à
+                    JSV2GP20220427234158912459843975$165380.
+
+                    Vous devez utiliser cette clé dans le formulaire ci-dessous.
+                </p>
+
+                <p>
+                    Pour construire votre tableau, il vous suffit de mettre une ville par ligne de la zone de texte.
+                </p>
+
                 <div>
                     <label for="input-api-key">
                         Clé API Michelin
-                        <input type="text" id="input-api-key" name="input-api-key"
-                            value="JSV2GP20220427234158912459843975$165380" />
+                        <input type="text" id="input-api-key" name="input-api-key" />
                     </label>
 
                     <label for="input-cities">
                         Villes
-                        <textarea id="input-cities" name="input-cities">
-Aix-en-provence/Marseille
-Amiens
-Talence/Bordeaux
-                        </textarea>
+                        <textarea id="input-cities" name="input-cities"></textarea>
                     </label>
                 </div>
                 <div id="results"></div>
@@ -64,7 +71,8 @@ Talence/Bordeaux
                 <div class="grid">
                     <div></div>
                     <div>
-                        <button id="gen-button" onclick="generate_table()">GÉNÉRER</button>
+                        <button id="gen-button" onclick="generate_table()"><i class="fa-solid fa-gears"></i> &nbsp;
+                            GÉNÉRER</button>
                     </div>
                     <div></div>
                 </div>

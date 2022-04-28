@@ -39,7 +39,6 @@ function fLoadMatrix(addresses) {
 function add_to_clipboard(container_node) {
     function listener(e) {
         e.clipboardData.setData("text/html", container_node.innerHTML);
-        e.clipboardData.setData("text/plain", container_node.innerHTML);
         e.preventDefault();
     }
     document.addEventListener("copy", listener);
@@ -57,8 +56,12 @@ function copy_table() {
         let template = document.getElementById('results')
         add_to_clipboard(template)
         gen_button.setAttribute('aria-busy', false)
-        gen_button.innerText = 'GÉNÉRER'
+        gen_button.innerHTML = '<i class="fa-solid fa-clipboard-check"></i> &nbsp; COPIÉ !'
     }, 2000);
+    
+    setTimeout(function () {
+        gen_button.innerHTML = '<i class="fa-solid fa-gears"></i> &nbsp; GÉNÉRER'
+    }, 5000);
 }
 
 function fLaunchRoutePlanner(coordsA, coordsB, i, j) {
@@ -81,7 +84,6 @@ function fLaunchRoutePlanner(coordsA, coordsB, i, j) {
 
 function generate_table() {
     api_key = document.getElementById('input-api-key').value
-    finished = false
 
     var addresses = new Array();
 
@@ -93,16 +95,7 @@ function generate_table() {
     gen_button.innerHTML = ''
 
     cities.split('\n').forEach(c => {
-        var city_name, city_token;
-        if (c.includes('/') == false) {
-            city_name = c
-            city_token = c
-        }
-        else {
-            city_token = c.split('/')[0]
-            city_name = c.split('/')[1]
-        }
-        addresses.push({ city: city_token, countryISOCode: "FRA", cityname: city_name })
+        addresses.push({ city: c, countryISOCode: "FRA", cityname: c })
     });
 
     $.getScript('https://secure-apijs.viamichelin.com/apijsv2/api/js?key=' + api_key + '&lang=fra&protocol=https', function () {
