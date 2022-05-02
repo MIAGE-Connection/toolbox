@@ -37,9 +37,18 @@
                 <hgroup>
                     <h2>Générateur de tour de cou</h2>
                     <h3>Ce petit outil permet de généner les tour de cou utilisés lors des congrès depuis un fichier
-                        template et un
-                        fichier csv.</h3>
+                        template et un fichier csv.
+                    </h3>
                 </hgroup>
+
+                <p>Pour pouvoir utiliser ce générateur il faut que vous fornissiez deux fichiers :
+                <ul>
+                    <li>Un fichier `template` avec comme taille 2000px x 1336px</li>
+                    <li>Un fichier `csv` avec comme header 'id;association;name;job`</li>
+                </ul>
+
+                En cas de non comformité de ces fichiers le générateur risque de ne pas fonctionner.
+                </p>
 
                 <div id="input-form">
                     <label for="input-form-template" id="input-form-template">
@@ -50,9 +59,38 @@
                         <strong>Étape n°2 : Charger les données</strong>
                     </label>
                 </div>
-                <div id="canva" style="display: none;">
-                    <h3>Exemple :</h3>
+                <div id="canva">
+                    <h3>Aperçu :</h3>
                 </div>
+
+                <details>
+                    <summary>Mode Avancé</summary>
+                    <div>
+                        <label for="input-form-font-size">
+                            Taille de la police
+                            <div class="grid">
+                                <label for="input-form-font-size-name" id="input-form-font-size-name">
+                                    NOM Prénom (Déf : 30px)
+                                </label>
+                                <label for="input-form-font-size-asso" id="input-form-font-size-asso">
+                                    Association (Déf : 30px)
+                                </label>
+                                <label for="input-form-font-size-job" id="input-form-font-size-job">
+                                    Rôle (Déf : 30px)
+                                </label>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="grid">
+                        <div>
+                            <label for="color" id="input-form-color">
+                                Couleur de la police (Déf : #FFFFFF)
+                            </label>
+                        </div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </details>
 
                 <div class="grid">
                     <div></div>

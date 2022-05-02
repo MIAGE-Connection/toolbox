@@ -1,9 +1,13 @@
 let cvn;
 let template_input;
 let data_input;
+let color_input;
 let template;
 let data;
 let first_row;
+let name_slider;
+let asso_slider;
+let job_slider;
 
 let SCALING_FACTOR = 2;
 
@@ -25,6 +29,16 @@ function create_form() {
     data_input = createFileInput(handleCSVFile);
     data_input.parent('input-form-csv')
     data_input.attribute('disabled', true)
+
+    color_input = createColorPicker('#FFFFFF');
+    color_input.parent('input-form-color')
+
+    name_slider = createSlider(5, 100, 30);
+    name_slider.parent('input-form-font-size-name')
+    asso_slider = createSlider(5, 100, 30);
+    asso_slider.parent('input-form-font-size-asso')
+    job_slider = createSlider(5, 100, 30);
+    job_slider.parent('input-form-font-size-job')
 }
 
 function draw() {
@@ -86,20 +100,22 @@ function render_first_row() {
 
 function init_text_render() {
     textAlign(CENTER)
-    textSize(30)
-    fill(255);
+    fill(color_input.color());
 }
 
 
 function render_name(name) {
+    textSize(name_slider.value())
     text(name, 250, 280);
 }
 
 function render_association(association) {
+    textSize(asso_slider.value())
     text(association, 250, 315);
 }
 
 function render_job(job) {
+    textSize(job_slider.value())
     text(job, 250, 350);
 }
 
