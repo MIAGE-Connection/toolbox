@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Générateur de tour de cou - MIAGE Connection</title>
+    <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS.">
+
+    <!-- Pico.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="../../css/pico.min.css">
+    <link rel="stylesheet" href="css/necklace_generator.css">
+
+    <link rel="icon" type="image/x-icon" href="../../img/logo-miage-connection.png">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
+</head>
+
+<body class="container-fluid">
+    <div id="layout-header">
+        <nav>
+            <ul>
+                <li>
+                    <a href="../../index.html"><img id="mc-logo-header" src="../../img/logo-miage-connection.png"
+                            width="50px">
+                        MIAGE Connection - Toolbox
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="layout-content">
+        <main class="container">
+            <section>
+                <hgroup>
+                    <h2>Générateur de tour de cou</h2>
+                    <h3>Ce petit outil permet de généner les tour de cou utilisés lors des congrès depuis un fichier
+                        template et un
+                        fichier csv.</h3>
+                </hgroup>
+
+                <div id="input-form">
+                    <label for="input-form-template" id="input-form-template">
+                        <strong>Étape n°1 : Ajouter un template</strong>
+                    </label>
+
+                    <label for="input-form-csv" id="input-form-csv">
+                        <strong>Étape n°2 : Charger les données</strong>
+                    </label>
+                </div>
+                <div id="canva" style="display: none;">
+                    <h3>Exemple :</h3>
+                </div>
+
+                <div class="grid">
+                    <div></div>
+                    <div>
+                        <button id="download_button" type="button" onclick="download_necklace()" disabled><i
+                                class="fa-solid fa-gears"></i> &nbsp;
+                            GÉNÉRER</button>
+                    </div>
+                    <div></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="./js/necklace_generator.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+
+</html>
