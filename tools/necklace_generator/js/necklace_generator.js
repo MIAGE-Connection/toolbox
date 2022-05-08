@@ -1,28 +1,69 @@
 let cvn;
 let template_input;
 let data_input;
-let color_input;
 let template;
 let data;
-let first_row;
-let name_slider;
-let asso_slider;
-let job_slider;
+let previewItem;
+
+let global_color_picker;
+let global_size_slider;
+
+let input_name_settings;
+let input_quota_settings;
+let input_role_settings;
 
 let SCALING_FACTOR = 2;
 
-function setup() {
-    create_form()
+class LineSettings {
+    constructor(name, x, y) {
+        this.name = name
+        this.x_slider = createSlider(0, 1000, x)
+        this.x_slider.parent('input-form-' + name + '-x')
+        this.y_slider = createSlider(0, 668, y)
+        this.y_slider.parent('input-form-' + name + '-y')
+        this.size_slider = createSlider(0, 100, 30)
+        this.size_slider.parent('input-form-' + name + '-size')
+        this.color_picker = createColorPicker('#FFFFFF');
+        this.color_picker.parent('input-form-' + name + '-color')
+    }
+
+    x() {
+        return this.x_slider.value()
+    }
+
+    y() {
+        return this.y_slider.value()
+    }
+
+    size() {
+        return this.size_slider.value()
+    }
+
+    setSize(nsize) {
+        this.size_slider.value(nsize)
+    }
+
+    color() {
+        return this.color_picker.value()
+    }
+
+    setColor(ncolor) {
+        this.color_picker.value(ncolor)
+    }
 }
 
-function create_canve() {
-    let cvn_node = document.getElementById('canva')
+function setup() {
+    createForm()
+}
+
+function createCanva() {
+    let cvn_node = document.getElementById('canva-container')
     cvn_node.style.display = 'block'
     cvn = createCanvas(1000, 668);
     cvn.parent('canva')
 }
 
-function create_form() {
+function createForm() {
     template_input = createFileInput(handleTemplateFile);
     template_input.parent('input-form-template')
 
@@ -30,35 +71,48 @@ function create_form() {
     data_input.parent('input-form-csv')
     data_input.attribute('disabled', true)
 
-    color_input = createColorPicker('#FFFFFF');
-    color_input.parent('input-form-color')
+    input_name_settings = new LineSettings('name', 250, 280)
+    input_quota_settings = new LineSettings('quota', 250, 315)
+    input_role_settings = new LineSettings('role', 250, 350)
 
-    name_slider = createSlider(5, 100, 30);
-    name_slider.parent('input-form-font-size-name')
-    asso_slider = createSlider(5, 100, 30);
-    asso_slider.parent('input-form-font-size-asso')
-    job_slider = createSlider(5, 100, 30);
-    job_slider.parent('input-form-font-size-job')
+    global_color_picker = createColorPicker('#FFFFFF')
+    global_color_picker.parent('input-form-global-color')
+    global_color_picker.input(updateLineSettings)
+
+    global_size_slider = createSlider(0, 100, 30)
+    global_size_slider.input(updateLineSettings)
+    global_size_slider.parent('input-form-global-size')
+}
+
+function updateLineSettings() {
+    input_name_settings.setColor(global_color_picker.value())
+    input_name_settings.setSize(global_size_slider.value())
+
+    input_quota_settings.setColor(global_color_picker.value())
+    input_quota_settings.setSize(global_size_slider.value())
+
+    input_role_settings.setColor(global_color_picker.value())
+    input_role_settings.setSize(global_size_slider.value())
 }
 
 function draw() {
-    do_render()
+    renderPreview()
 }
 
-function do_render() {
+function renderPreview() {
 
     if (template) {
         image(template, 0, 0, template.width / SCALING_FACTOR, template.height / SCALING_FACTOR);
     }
 
-    if (first_row) {
-        render_first_row(first_row)
+    if (previewItem) {
+        renderPreviewItem(previewItem)
     }
 }
 
 function handleTemplateFile(file) {
     if (file.type === 'image') {
-        create_canve()
+        createCanva()
         template = createImg(file.data, '');
         template.hide();
         data_input.removeAttribute('disabled')
@@ -70,14 +124,86 @@ function handleTemplateFile(file) {
 function handleCSVFile(file) {
     if (file.type === 'text' && file.subtype === 'csv') {
         data = csvToArray(file.data);
-        first_row = data[0]
+        previewItem = data[0]
+        displayData()
         document.getElementById('download_button').removeAttribute('disabled')
     } else {
         template = null;
     }
 }
 
-function csvToArray(str, delimiter = ";") {
+function displayData() {
+    let db_node = document.getElementById('database-container')
+    db_node.style.display = 'block'
+    let database = document.getElementById("database")
+    let headers = Object.keys(previewItem)
+    for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        let row = document.createElement('tr')
+        let cell = document.createElement('td')
+        cell.innerText = index
+        row.appendChild(cell)
+        headers.forEach(h => {
+            cell = document.createElement('td')
+            cell.innerText = element[h]
+            row.appendChild(cell)
+        })
+        row.appendChild(createActionCell(index))
+        database.appendChild(row)
+    }
+}
+
+function createActionCell(elementIndex) {
+    let cell = document.createElement('td')
+    cell.appendChild(createDisplayAction(elementIndex))
+    cell.appendChild(createDownloadAction(elementIndex))
+    cell.appendChild(createRemoveAction(elementIndex))
+    return cell
+}
+
+function previewDataIndex(elementIndex) {
+    previewItem = data[elementIndex]
+    renderPreview()
+}
+
+function createDisplayAction(elementIndex) {
+    let action = document.createElement('a')
+    action.style.margin = '3%'
+    action.style.cursor = 'pointer'
+    action.innerHTML = '<i class="fa-solid fa-eye"></i>'
+    action.onclick = function (event) {
+        previewDataIndex(elementIndex)
+    }
+    return action
+}
+
+function createDownloadAction(elementIndex) {
+    let action = document.createElement('a')
+    action.style.margin = '3%'
+    action.style.cursor = 'pointer'
+    action.innerHTML = '<i class="fa-solid fa-download"></i>'
+    action.onclick = function (event) {
+        previewDataIndex(elementIndex)
+        downloadPreview(data[elementIndex])
+    }
+    return action
+}
+
+function createRemoveAction(elementIndex) {
+    let action = document.createElement('a')
+    action.style.margin = '3%'
+    action.style.cursor = 'pointer'
+    action.innerHTML = '<i class="fa-solid fa-trash"></i>'
+    action.onclick = function (event) {
+        data.splice(elementIndex, 1)
+        let database = document.getElementById("database")
+        database.innerHTML = ""
+        displayData()
+    }
+    return action
+}
+
+function csvToArray(str, delimiter = ",") {
     const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
     const rows = str.slice(str.indexOf("\n") + 1).split("\n");
     const arr = rows.map(function (row) {
@@ -91,53 +217,59 @@ function csvToArray(str, delimiter = ";") {
     return arr;
 }
 
-function render_first_row() {
-    init_text_render()
-    render_name(first_row.name)
-    render_association(first_row.association)
-    render_job(first_row.job)
-}
-
-function init_text_render() {
+function renderPreviewItem() {
     textAlign(CENTER)
-    fill(color_input.color());
+    renderLine(previewItem.Nom + ' ' + previewItem.Prenom, input_name_settings)
+    renderLine(previewItem.Quota, input_quota_settings)
+    renderLine(previewItem.Role, input_role_settings)
 }
 
-
-function render_name(name) {
-    textSize(name_slider.value())
-    text(name, 250, 280);
+function renderLine(text_value, line_settings) {
+    fill(line_settings.color())
+    textSize(line_settings.size())
+    text(text_value, line_settings.x(), line_settings.y());
 }
 
-function render_association(association) {
-    textSize(asso_slider.value())
-    text(association, 250, 315);
+function getFirstRowFilename() {
+    if (previewItem)
+        return previewItem.Quota + '_' + previewItem.Nom + '_' + previewItem.Prenom
+    else
+        return 'preview'
 }
 
-function render_job(job) {
-    textSize(job_slider.value())
-    text(job, 250, 350);
+function renderPreviewAndDownload(element) {
+    previewItem = element;
+    downloadPreview()
 }
 
-function download_necklace() {
+function downloadPreview() {
+    saveCanvas(cvn, getFirstRowFilename(), 'png');
+}
+
+function downloadNecklace() {
     let download_button = document.getElementById('download_button')
 
     download_button.innerHTML = ''
     download_button.onclick = ''
     download_button.setAttribute('aria-busy', true)
 
+    noLoop()
+    frameRate(1)
     data.forEach(e => {
-        filename = e.association + '_' + e.name
-        first_row = e;
-        do_render()
-        saveCanvas(cvn, filename, 'png');
+        previewItem = e
+        redraw()
+        downloadPreview()
     })
-
-    download_button.removeAttribute('aria-busy')
-    download_button.innerHTML = '<i class="fa-solid fa-check"></i> &nbsp; GÉNÉRÉS !'
+    frameRate(30)
+    loop()
 
     setTimeout(() => {
-        download_button.onclick = download_necklace
+        download_button.removeAttribute('aria-busy')
+        download_button.innerHTML = '<i class="fa-solid fa-check"></i> &nbsp; GÉNÉRÉS !'
+    }, 5000)
+
+    setTimeout(() => {
+        download_button.onclick = downloadNecklace
         download_button.innerHTML = '<i class="fa-solid fa-gears"></i> &nbsp; GÉNÉRER'
     }, 5000)
 

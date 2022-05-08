@@ -1,5 +1,8 @@
-#canva {
+#canva-container, #database-container {
     display: none;
+}
+
+#canva {
     text-align: center;
-    margin: 5%;
+    margin: 2% 5% 2% 5%;
 }
