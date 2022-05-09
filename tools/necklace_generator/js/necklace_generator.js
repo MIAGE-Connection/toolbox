@@ -7,6 +7,8 @@ let previewItem;
 
 let global_color_picker;
 let global_size_slider;
+let global_bold_checkbox;
+let global_italic_checkbox;
 
 let input_name_settings;
 let input_quota_settings;
@@ -25,6 +27,10 @@ class LineSettings {
         this.size_slider.parent('input-form-' + name + '-size')
         this.color_picker = createColorPicker('#FFFFFF');
         this.color_picker.parent('input-form-' + name + '-color')
+        this.bold_checkbox = createCheckbox()
+        this.bold_checkbox.parent('input-form-' + name + '-bold')
+        this.italic_checkbox = createCheckbox()
+        this.italic_checkbox.parent('input-form-' + name + '-italic')
     }
 
     x() {
@@ -50,6 +56,27 @@ class LineSettings {
     setColor(ncolor) {
         this.color_picker.value(ncolor)
     }
+
+    style() {
+        if (this.bold_checkbox.checked())
+            if(this.italic_checkbox.checked())
+                return BOLDITALIC
+            else
+                return BOLD
+        
+        if (this.italic_checkbox.checked())
+            return ITALIC
+        
+        return NORMAL
+    }
+
+    setBold(nvalue) {
+        this.bold_checkbox.checked(nvalue)
+    }
+
+    setItalic(nvalue) {
+        this.italic_checkbox.checked(nvalue)
+    }    
 }
 
 function setup() {
@@ -82,17 +109,31 @@ function createForm() {
     global_size_slider = createSlider(0, 100, 30)
     global_size_slider.input(updateLineSettings)
     global_size_slider.parent('input-form-global-size')
+
+    global_bold_checkbox = createCheckbox()
+    global_bold_checkbox.changed(updateLineSettings)
+    global_bold_checkbox.parent('input-form-global-bold')
+    
+    global_italic_checkbox = createCheckbox()
+    global_italic_checkbox.changed(updateLineSettings)
+    global_italic_checkbox.parent('input-form-global-italic')
 }
 
 function updateLineSettings() {
-    input_name_settings.setColor(global_color_picker.value())
     input_name_settings.setSize(global_size_slider.value())
-
-    input_quota_settings.setColor(global_color_picker.value())
+    input_name_settings.setColor(global_color_picker.value())
+    input_name_settings.setBold(global_bold_checkbox.checked())
+    input_name_settings.setItalic(global_italic_checkbox.checked())
+    
     input_quota_settings.setSize(global_size_slider.value())
-
-    input_role_settings.setColor(global_color_picker.value())
+    input_quota_settings.setColor(global_color_picker.value())
+    input_quota_settings.setBold(global_bold_checkbox.checked())
+    input_quota_settings.setItalic(global_italic_checkbox.checked())
+    
     input_role_settings.setSize(global_size_slider.value())
+    input_role_settings.setColor(global_color_picker.value())
+    input_role_settings.setBold(global_bold_checkbox.checked())
+    input_role_settings.setItalic(global_italic_checkbox.checked())
 }
 
 function draw() {
@@ -181,6 +222,7 @@ function createDownloadAction(elementIndex) {
     let action = document.createElement('a')
     action.style.margin = '3%'
     action.style.cursor = 'pointer'
+    action.name = 'download-people'
     action.innerHTML = '<i class="fa-solid fa-download"></i>'
     action.onclick = function (event) {
         previewDataIndex(elementIndex)
@@ -226,6 +268,7 @@ function renderPreviewItem() {
 
 function renderLine(text_value, line_settings) {
     fill(line_settings.color())
+    textStyle(line_settings.style())
     textSize(line_settings.size())
     text(text_value, line_settings.x(), line_settings.y());
 }
@@ -253,14 +296,14 @@ function downloadNecklace() {
     download_button.onclick = ''
     download_button.setAttribute('aria-busy', true)
 
+    people_link = document.getElementsByName('download-people')
+
+    alert(people_link.length)
     noLoop()
-    frameRate(1)
-    data.forEach(e => {
-        previewItem = e
+    people_link.forEach(link => {
         redraw()
-        downloadPreview()
+        link.click()
     })
-    frameRate(30)
     loop()
 
     setTimeout(() => {
