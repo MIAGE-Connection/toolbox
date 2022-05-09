@@ -241,6 +241,7 @@ function createRemoveAction(elementIndex) {
         let database = document.getElementById("database")
         database.innerHTML = ""
         displayData()
+        console.log(data)
     }
     return action
 }
@@ -251,7 +252,7 @@ function csvToArray(str, delimiter = ",") {
     const arr = rows.map(function (row) {
         const values = row.split(delimiter);
         const el = headers.reduce(function (object, header, index) {
-            object[header] = values[index];
+            object[header.trim()] = values[index];
             return object;
         }, {});
         return el;
@@ -261,6 +262,7 @@ function csvToArray(str, delimiter = ",") {
 
 function renderPreviewItem() {
     textAlign(CENTER)
+    console.log(previewItem)
     renderLine(previewItem.Nom + ' ' + previewItem.Prenom, input_name_settings)
     renderLine(previewItem.Quota, input_quota_settings)
     renderLine(previewItem.Role, input_role_settings)
