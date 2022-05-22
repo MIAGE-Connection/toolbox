@@ -83,10 +83,10 @@ function setup() {
     createForm()
 }
 
-function createCanva() {
+function createCanva(width, height) {
     let cvn_node = document.getElementById('canva-container')
     cvn_node.style.display = 'block'
-    cvn = createCanvas(1000, 668);
+    cvn = createCanvas(width/SCALING_FACTOR, height/SCALING_FACTOR);
     cvn.parent('canva')
 }
 
@@ -153,8 +153,8 @@ function renderPreview() {
 
 function handleTemplateFile(file) {
     if (file.type === 'image') {
-        createCanva()
         template = createImg(file.data, '');
+        createCanva(template.width, template.height)
         template.hide();
         data_input.removeAttribute('disabled')
     } else {
