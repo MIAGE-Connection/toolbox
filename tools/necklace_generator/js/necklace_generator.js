@@ -16,6 +16,8 @@ let input_role_settings;
 let input_team_settings;
 
 let SCALING_FACTOR = 2;
+let TEMPLATE_WIDTH = 2000;
+let TEMPLATE_HEIGHT = 1336;
 
 class LineSettings {
     constructor(name, x, y) {
@@ -157,7 +159,7 @@ function draw() {
 function renderPreview() {
 
     if (template) {
-        image(template, 0, 0, template.width / SCALING_FACTOR, template.height / SCALING_FACTOR);
+        image(template, 0, 0, TEMPLATE_WIDTH/SCALING_FACTOR, TEMPLATE_HEIGHT/SCALING_FACTOR);
     }
 
     if (previewItem) {
@@ -168,8 +170,7 @@ function renderPreview() {
 function handleTemplateFile(file) {
     if (file.type === 'image') {
         template = createImg(file.data, '');
-        console.log(template)
-        createCanva(template.width, template.height)
+        createCanva(TEMPLATE_WIDTH, TEMPLATE_HEIGHT)
         template.hide();
         data_input.removeAttribute('disabled')
     } else {
