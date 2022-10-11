@@ -13,6 +13,7 @@ let global_italic_checkbox;
 let input_name_settings;
 let input_quota_settings;
 let input_role_settings;
+let input_team_settings;
 
 let SCALING_FACTOR = 2;
 
@@ -20,8 +21,10 @@ class LineSettings {
     constructor(name, x, y) {
         this.name = name
         this.x_slider = createSlider(0, 1000, x)
+        this.x_slider.input(() => {this.UpdateValueDisplayed(this.x_slider, 'x')})
         this.x_slider.parent('input-form-' + name + '-x')
         this.y_slider = createSlider(0, 668, y)
+        this.y_slider.input(() => {this.UpdateValueDisplayed(this.y_slider, 'y')})
         this.y_slider.parent('input-form-' + name + '-y')
         this.size_slider = createSlider(0, 100, 30)
         this.size_slider.parent('input-form-' + name + '-size')
@@ -31,6 +34,11 @@ class LineSettings {
         this.bold_checkbox.parent('input-form-' + name + '-bold')
         this.italic_checkbox = createCheckbox()
         this.italic_checkbox.parent('input-form-' + name + '-italic')
+    }
+
+    UpdateValueDisplayed(slider, slider_name) {
+        let value = document.getElementById('input-form-' + this.name + '-' + slider_name + '-value')
+        value.innerText =' [' +  slider.value() + '] '
     }
 
     x() {
@@ -101,6 +109,7 @@ function createForm() {
     input_name_settings = new LineSettings('name', 250, 280)
     input_quota_settings = new LineSettings('quota', 250, 315)
     input_role_settings = new LineSettings('role', 250, 350)
+    input_team_settings = new LineSettings('team', 250, 395)
 
     global_color_picker = createColorPicker('#FFFFFF')
     global_color_picker.parent('input-form-global-color')
@@ -134,6 +143,11 @@ function updateLineSettings() {
     input_role_settings.setColor(global_color_picker.value())
     input_role_settings.setBold(global_bold_checkbox.checked())
     input_role_settings.setItalic(global_italic_checkbox.checked())
+  
+    input_team_settings.setSize(global_size_slider.value())
+    input_team_settings.setColor(global_color_picker.value())
+    input_team_settings.setBold(global_bold_checkbox.checked())
+    input_team_settings.setItalic(global_italic_checkbox.checked())
 }
 
 function draw() {
@@ -154,6 +168,7 @@ function renderPreview() {
 function handleTemplateFile(file) {
     if (file.type === 'image') {
         template = createImg(file.data, '');
+        console.log(template)
         createCanva(template.width, template.height)
         template.hide();
         data_input.removeAttribute('disabled')
@@ -241,7 +256,6 @@ function createRemoveAction(elementIndex) {
         let database = document.getElementById("database")
         database.innerHTML = ""
         displayData()
-        console.log(data)
     }
     return action
 }
@@ -262,10 +276,10 @@ function csvToArray(str, delimiter = ",") {
 
 function renderPreviewItem() {
     textAlign(CENTER)
-    console.log(previewItem)
     renderLine(previewItem.Nom + ' ' + previewItem.Prenom, input_name_settings)
     renderLine(previewItem.Quota, input_quota_settings)
     renderLine(previewItem.Role, input_role_settings)
+    renderLine(previewItem.Equipe, input_team_settings)
 }
 
 function renderLine(text_value, line_settings) {
