@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Générateur de QR Code - MIAGE Connection</title>
+    <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS.">
+
+    <!-- Pico.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <link rel="stylesheet" href="../../css/pico.min.css">
+
+    <link rel="icon" type="image/x-icon" href="../../img/logo-miage-connection.png">
+
+    <script src="./js/qrcode.min.js"></script>
+    <script src="./js/qr_code__generator.js"></script>
+</head>
+
+<body class="container-fluid">
+    <div id="layout-header">
+        <nav>
+            <ul>
+                <li>
+                    <a href="../../index.html"><img id="mc-logo-header" src="../../img/logo-miage-connection.png"
+                            width="50px">
+                        MIAGE Connection - Toolbox
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="layout-content">
+        <main class="container">
+            <section>
+                <hgroup>
+                    <h2>Générateur de QR Code</h2>
+                    <h3>Ce petit outil permet de généner les QR Code au couleur de MIAGE Connection.</h3>
+                </hgroup>
+                <div class="grid">
+                    <div></div>
+                    <div>
+                        <center id="qr_code">
+
+                        </center>
+                    </div>
+                    <div></div>
+                </div>
+                <div>
+                    <label for="input-division">
+                        Donnée
+                        <input type="text" id="input-address" name="input-address" value="https://www.miage-connection.fr"/>
+                    </label>
+                </div>
+                <div class="grid">
+                    <div>
+                        <label for="foreground">Couleur Primaire
+                            <input type="color" id="foreground-color" name="foreground-color" value="#2B309B">
+                        </label>
+                    </div>
+                    <div>
+                        <label for="background-color">Couleur de fond
+                            <input type="color" id="background-color" name="background-color" value="#ffffff">
+                        </label>
+                    </div>
+                    <div class="grid">
+                        <div>
+                            <label for="width">Longueur
+                                <input type="number" id="width" name="width" value="400">
+                            </label>
+                        </div>
+                        <div>
+                            <label for="height">Largeur
+                                <input type="number" id="height" name="height" value="400">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div>
+                        <button id="copy-button" onclick="create()"> <i class="fa-solid fa-gear"></i>
+                            &nbsp; GENERER</a>
+                    </div>
+                    <div>
+                        <button id="copy-button" onclick="download()"> <i class="fa-solid fa-clipboard"></i>
+                            &nbsp; TELECHARGER</a>
+                    </div>
+                    <div>
+                        <button id="copy-button" onclick="reset()"> <i class="fa-solid fa-trash"></i>
+                            &nbsp; RESET</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+
+</html>
