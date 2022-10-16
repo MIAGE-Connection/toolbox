@@ -29,6 +29,7 @@ class LineSettings {
         this.y_slider.input(() => {this.UpdateValueDisplayed(this.y_slider, 'y')})
         this.y_slider.parent('input-form-' + name + '-y')
         this.size_slider = createSlider(0, 100, 30)
+        this.size_slider.input(() => {this.UpdateValueDisplayed(this.size_slider, 'size')})
         this.size_slider.parent('input-form-' + name + '-size')
         this.color_picker = createColorPicker('#FFFFFF');
         this.color_picker.parent('input-form-' + name + '-color')
@@ -131,7 +132,7 @@ function createForm() {
 }
 
 function updateLineSettings() {
-    input_name_settings.setSize(global_size_slider.value())
+    input_name_settings.setSize(global_size_slider.value())    
     input_name_settings.setColor(global_color_picker.value())
     input_name_settings.setBold(global_bold_checkbox.checked())
     input_name_settings.setItalic(global_italic_checkbox.checked())
@@ -150,6 +151,9 @@ function updateLineSettings() {
     input_team_settings.setColor(global_color_picker.value())
     input_team_settings.setBold(global_bold_checkbox.checked())
     input_team_settings.setItalic(global_italic_checkbox.checked())
+
+    let global_size_value = document.getElementById('input-form-global-size-value')
+    global_size_value.innerText =' [' +  global_size_slider.value() + '] '
 }
 
 function draw() {
