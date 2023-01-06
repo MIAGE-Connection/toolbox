@@ -48,8 +48,16 @@ class LineSettings {
         return this.x_slider.value()
     }
 
+    setX(nX) {
+        this.x_slider.value = nX
+    }
+
     y() {
         return this.y_slider.value()
+    }
+
+    setY(nY) {
+        this.y_slider.value = nY
     }
 
     size() {
@@ -109,10 +117,10 @@ function createForm() {
     data_input.parent('input-form-csv')
     data_input.attribute('disabled', true)
 
-    input_name_settings = new LineSettings('name', 250, 280)
-    input_quota_settings = new LineSettings('quota', 250, 315)
-    input_role_settings = new LineSettings('role', 250, 350)
-    input_team_settings = new LineSettings('team', 250, 395)
+    input_name_settings = new LineSettings('name', 315, 301)
+    input_quota_settings = new LineSettings('quota', 315, 347)
+    input_role_settings = new LineSettings('role', 315, 394)
+    input_team_settings = new LineSettings('team', 912, 432)
 
     global_color_picker = createColorPicker('#FFFFFF')
     global_color_picker.parent('input-form-global-color')
@@ -129,6 +137,14 @@ function createForm() {
     global_italic_checkbox = createCheckbox()
     global_italic_checkbox.changed(updateLineSettings)
     global_italic_checkbox.parent('input-form-global-italic')
+
+    setDefaultFormValue();
+}
+
+function setDefaultFormValue() {
+    input_name_settings.setBold(true);
+    input_role_settings.setItalic(true);
+    input_team_settings.setColor("#2b309b")
 }
 
 function updateLineSettings() {
