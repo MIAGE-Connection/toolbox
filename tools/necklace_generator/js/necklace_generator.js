@@ -1,6 +1,7 @@
 let cvn;
 let template_input;
 let data_input;
+let separator_input;
 let template;
 let data;
 let previewItem;
@@ -117,6 +118,10 @@ function createForm() {
     data_input.parent('input-form-csv')
     data_input.attribute('disabled', true)
 
+    separator_input = createInput(',')
+    separator_input.parent('input-form-csv-separator')
+    separator_input.attribute('disabled', true)
+
     input_name_settings = new LineSettings('name', 315, 301)
     input_quota_settings = new LineSettings('quota', 315, 347)
     input_role_settings = new LineSettings('role', 315, 394)
@@ -192,6 +197,7 @@ function handleTemplateFile(file) {
         template = createImg(file.data, '');
         createCanva(TEMPLATE_WIDTH, TEMPLATE_HEIGHT)
         template.hide();
+        separator_input.removeAttribute('disabled')
         data_input.removeAttribute('disabled')
     } else {
         template = null;
@@ -281,7 +287,14 @@ function createRemoveAction(elementIndex) {
     return action
 }
 
-function csvToArray(str, delimiter = ",") {
+function csvToArray(str) {
+
+    delimiter = separator_input.value()
+    if (separator_input !== ";" || separator_input !== ",") {
+        alert(', will be used as CSV separator')
+        delimiter = ','
+    }
+        
     const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
     const rows = str.slice(str.indexOf("\n") + 1).split("\n");
     const arr = rows.map(function (row) {
