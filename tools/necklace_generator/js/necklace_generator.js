@@ -310,7 +310,7 @@ function csvToArray(str) {
 
 function renderPreviewItem() {
     textAlign(CENTER)
-    renderLine(previewItem.Nom + ' ' + previewItem.Prenom, input_name_settings)
+    renderLine(previewItem.Prenom + ' ' + previewItem.Nom, input_name_settings)
     renderLine(previewItem.Quota, input_quota_settings)
     renderLine(previewItem.Role, input_role_settings)
     renderLine(previewItem.Equipe, input_team_settings)
