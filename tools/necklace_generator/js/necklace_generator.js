@@ -118,7 +118,7 @@ function createForm() {
     data_input.parent('input-form-csv')
     data_input.attribute('disabled', true)
 
-    separator_input = createInput(',')
+    separator_input = createInput(';')
     separator_input.parent('input-form-csv-separator')
     separator_input.attribute('disabled', true)
 
@@ -290,10 +290,7 @@ function createRemoveAction(elementIndex) {
 function csvToArray(str) {
 
     delimiter = separator_input.value()
-    if (separator_input !== ";" || separator_input !== ",") {
-        alert(', will be used as CSV separator')
-        delimiter = ','
-    }
+    alert(delimiter + ' will be used as CSV separator')
         
     const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
     const rows = str.slice(str.indexOf("\n") + 1).split("\n");
