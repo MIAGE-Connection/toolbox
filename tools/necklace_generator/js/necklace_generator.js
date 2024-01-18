@@ -17,13 +17,13 @@ let input_role_settings;
 let input_team_settings;
 
 let SCALING_FACTOR = 2;
-let TEMPLATE_WIDTH = 2362;
-let TEMPLATE_HEIGHT = 768;
+let TEMPLATE_WIDTH = 2000;
+let TEMPLATE_HEIGHT = 1336;
 
 class LineSettings {
   constructor(name, x, y) {
     this.name = name;
-    this.x_slider = createSlider(0, 2362 / 2, x);
+    this.x_slider = createSlider(0, 1000, x);
     this.x_slider.input(() => {
       this.UpdateValueDisplayed(this.x_slider, "x");
     });
