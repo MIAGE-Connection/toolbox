@@ -20,6 +20,41 @@ let SCALING_FACTOR = 2;
 let TEMPLATE_WIDTH = 2000;
 let TEMPLATE_HEIGHT = 1336;
 
+const defaultSettings = {
+  name: {
+    x: 315,
+    y: 301,
+    size: 24,
+    color: "#FFFFFF",
+    bold: true,
+    italic: false,
+  },
+  quota: {
+    x: 315,
+    y: 347,
+    size: 18,
+    color: "#FFFFFF",
+    bold: false,
+    italic: false,
+  },
+  role: {
+    x: 315,
+    y: 394,
+    size: 18,
+    color: "#FFFFFF",
+    bold: false,
+    italic: true,
+  },
+  team: {
+    x: 912,
+    y: 432,
+    size: 18,
+    color: "#2b309b",
+    bold: false,
+    italic: false,
+  },
+};
+
 class LineSettings {
   constructor(name, x, y) {
     this.name = name;
@@ -119,7 +154,9 @@ class LineSettings {
   }
 
   loadSettings() {
-    const settings = JSON.parse(localStorage.getItem(this.name + "_settings"));
+    const settings =
+      JSON.parse(localStorage.getItem(this.name + "_settings")) ??
+      defaultSettings;
     if (settings) {
       // Update slider values and trigger input event to refresh UI
       this.x_slider.value(settings.x);
