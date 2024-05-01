@@ -25,16 +25,19 @@ class LineSettings {
     this.name = name;
     this.x_slider = createSlider(0, 1000, x);
     this.x_slider.input(() => {
+      this.saveSettings();
       this.UpdateValueDisplayed(this.x_slider, "x");
     });
     this.x_slider.parent("input-form-" + name + "-x");
     this.y_slider = createSlider(0, 668, y);
     this.y_slider.input(() => {
+      this.saveSettings();
       this.UpdateValueDisplayed(this.y_slider, "y");
     });
     this.y_slider.parent("input-form-" + name + "-y");
     this.size_slider = createSlider(0, 100, 30);
     this.size_slider.input(() => {
+      this.saveSettings();
       this.UpdateValueDisplayed(this.size_slider, "size");
     });
     this.size_slider.parent("input-form-" + name + "-size");
@@ -102,6 +105,49 @@ class LineSettings {
   setItalic(nvalue) {
     this.italic_checkbox.checked(nvalue);
   }
+
+  saveSettings() {
+    const settings = {
+      x: this.x_slider.value(),
+      y: this.y_slider.value(),
+      size: this.size_slider.value(),
+      color: this.color_picker.value(),
+      bold: this.bold_checkbox.checked(),
+      italic: this.italic_checkbox.checked(),
+    };
+    localStorage.setItem(this.name + "_settings", JSON.stringify(settings));
+  }
+
+  loadSettings() {
+    const settings = JSON.parse(localStorage.getItem(this.name + "_settings"));
+    if (settings) {
+      // Update slider values and trigger input event to refresh UI
+      this.x_slider.value(settings.x);
+      this.x_slider.elt.dispatchEvent(new Event("input"));
+
+      this.y_slider.value(settings.y);
+      this.y_slider.elt.dispatchEvent(new Event("input"));
+
+      this.size_slider.value(settings.size);
+      this.size_slider.elt.dispatchEvent(new Event("input"));
+
+      // Update color picker value and trigger input event
+      this.color_picker.value(settings.color);
+      this.color_picker.elt.dispatchEvent(new Event("input"));
+
+      // Update checkboxes and trigger change event
+      this.bold_checkbox.checked(settings.bold);
+      this.bold_checkbox.elt.dispatchEvent(new Event("change"));
+
+      this.italic_checkbox.checked(settings.italic);
+      this.italic_checkbox.elt.dispatchEvent(new Event("change"));
+
+      // Update displayed values next to sliders if you have any
+      this.UpdateValueDisplayed(this.x_slider, "x");
+      this.UpdateValueDisplayed(this.y_slider, "y");
+      this.UpdateValueDisplayed(this.size_slider, "size");
+    }
+  }
 }
 
 function setup() {
@@ -148,6 +194,11 @@ function createForm() {
   global_italic_checkbox.changed(updateLineSettings);
   global_italic_checkbox.parent("input-form-global-italic");
 
+  input_name_settings.loadSettings();
+  input_quota_settings.loadSettings();
+  input_role_settings.loadSettings();
+  input_team_settings.loadSettings();
+
   setDefaultFormValue();
 }
 
@@ -156,6 +207,87 @@ function setDefaultFormValue() {
   input_role_settings.setItalic(true);
   input_team_settings.setColor("#2b309b");
 }
+
+function saveAllSettings() {
+  input_name_settings.saveSettings();
+  input_quota_settings.saveSettings();
+  input_role_settings.saveSettings();
+  input_team_settings.saveSettings();
+  alert("Les paramètres ont été sauvegardés avec succès !");
+}
+
+function clearAllSettings() {
+  localStorage.clear();
+  alert(
+    "Les paramètres ont été réinitialisés avec succès ! La page va se recharger afin d'appliquer les changements.."
+  );
+  location.reload();
+}
+
+function exportSettingsToFile() {
+  const settings = {
+    name: JSON.parse(localStorage.getItem("name_settings")),
+    quota: JSON.parse(localStorage.getItem("quota_settings")),
+    role: JSON.parse(localStorage.getItem("role_settings")),
+    team: JSON.parse(localStorage.getItem("team_settings")),
+  };
+
+  if (Object.values(settings).every((value) => value === null)) {
+    alert(
+      "Aucun paramètre à exporter ! Veuillez sauvegarder des paramètres avant de continuer."
+    );
+    return;
+  }
+
+  const settingsStr = JSON.stringify(settings, null, 2);
+  const blob = new Blob([settingsStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.download = "MC_TDC_PARAMS.json";
+  a.href = url;
+  a.textContent = "Télécharger le fichier";
+  a.click();
+}
+
+function importSettingsFromFile(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const settings = JSON.parse(e.target.result);
+      if (settings) {
+        Object.keys(settings).forEach((key) => {
+          loadSettingsToApp(settings[key], key);
+        });
+      }
+      alert(
+        "Paramètres importés avec succès ! La page va se recharger afin d'appliquer les changements.."
+      );
+    };
+    reader.readAsText(file);
+
+    // Reload to update UI with new settings
+    location.reload();
+  }
+}
+
+function loadSettingsToApp(settings, key) {
+  if (!settings) return;
+  const storageKey = key + "_settings";
+
+  localStorage.setItem(storageKey, JSON.stringify(settings));
+
+  if (settingsInstances[key]) {
+    settingsInstances[key].loadSettings();
+  }
+}
+
+const settingsInstances = {
+  name: input_name_settings,
+  quota: input_quota_settings,
+  role: input_role_settings,
+  team: input_team_settings,
+};
 
 function updateLineSettings() {
   input_name_settings.setSize(global_size_slider.value());

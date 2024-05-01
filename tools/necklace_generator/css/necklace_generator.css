@@ -6,3 +6,10 @@
     text-align: center;
     margin: 2% 5% 2% 5%;
 }
+
+.settings-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px
+}
+

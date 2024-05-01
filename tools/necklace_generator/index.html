@@ -1,234 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Générateur de tour de cou - MIAGE Connection</title>
-    <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS.">
+    <meta
+      name="description"
+      content="A minimalist layout for Login pages. Built with Pico CSS."
+    />
 
     <!-- Pico.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <link rel="stylesheet" href="../../css/pico.min.css">
-    <link rel="stylesheet" href="css/necklace_generator.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../../css/pico.min.css" />
+    <link rel="stylesheet" href="css/necklace_generator.css" />
 
-    <link rel="icon" type="image/x-icon" href="../../img/logo-miage-connection.png">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="../../img/logo-miage-connection.png"
+    />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
     <script src="https://unpkg.com/ccapture.js@1.1.0/build/CCapture.all.min.js"></script>
-</head>
+  </head>
 
-<body class="container-fluid">
+  <body class="container-fluid">
     <div id="layout-header">
-        <nav>
-            <ul>
-                <li>
-                    <a href="../../index.html"><img id="mc-logo-header" src="../../img/logo-miage-connection.png"
-                            width="50px">
-                        MIAGE Connection - Toolbox - 2024
-                    </a>
-                </li>
-            </ul>
-        </nav>
+      <nav>
+        <ul>
+          <li>
+            <a href="../../index.html"
+              ><img
+                id="mc-logo-header"
+                src="../../img/logo-miage-connection.png"
+                width="50px"
+              />
+              MIAGE Connection - Toolbox - 2024
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
 
     <div id="layout-content">
-        <main class="container">
-            <section>
-                <hgroup>
-                    <h2>Générateur de tour de cou</h2>
-                    <h3>Ce petit outil permet de généner les tour de cou utilisés lors des congrès depuis un fichier
-                        template et un fichier csv.
-                    </h3>
-                </hgroup>
+      <main class="container">
+        <section>
+          <hgroup>
+            <h2>Générateur de tour de cou</h2>
+            <h3>
+              Ce petit outil permet de généner les tour de cou utilisés lors des
+              congrès depuis un fichier template et un fichier csv.
+            </h3>
+          </hgroup>
 
-                <p>Pour pouvoir utiliser ce générateur il faut que vous fornissiez deux fichiers :
-                <ul>
-                    <li>Un fichier `template` avec comme taille 2000px x 1336px</li>
-                    <li>Un fichier `csv` avec comme header 'Nom,Prenom,Quota,Role`</li>
-                </ul>
+          <p>
+            Pour pouvoir utiliser ce générateur il faut que vous fornissiez deux
+            fichiers :
+          </p>
+          <ul>
+            <li>Un fichier `template` avec comme taille 2000px x 1336px</li>
+            <li>Un fichier `csv` avec comme header 'Nom,Prenom,Quota,Role`</li>
+          </ul>
+          <p>
+            En cas de non comformité de ces fichiers le générateur risque de ne
+            pas fonctionner.
+          </p>
 
-                En cas de non comformité de ces fichiers le générateur risque de ne pas fonctionner.
-                </p>
+          <div id="input-form">
+            <label for="input-form-template" id="input-form-template">
+              <strong>Étape n°1 : Ajouter un template</strong>
+            </label>
+            <div class="grid">
+              <label for="input-form-csv" id="input-form-csv">
+                <strong>Étape n°2 : Charger les données</strong>
+              </label>
 
-                <div id="input-form">
-                    <label for="input-form-template" id="input-form-template">
-                        <strong>Étape n°1 : Ajouter un template</strong>
-                    </label>
-                    <div class="grid">
-                        <label for="input-form-csv" id="input-form-csv">
-                            <strong>Étape n°2 : Charger les données</strong>
-                        </label>
+              <label
+                for="input-form-csv-separator"
+                id="input-form-csv-separator"
+              >
+                <strong>Séparateur</strong>
+              </label>
+            </div>
+          </div>
+          <details id="canva-container">
+            <summary>Aperçu :</summary>
+            <div id="canva"></div>
+            <div class="grid">
+              <div></div>
+              <label for="input-form-global-color" id="input-form-global-color">
+                Couleur de la police (Déf : #FFFFFF)
+              </label>
 
-                        <label for="input-form-csv-separator" id="input-form-csv-separator">
-                            <strong>Séparateur</strong>
-                        </label>
-                    </div>
-                </div>
-                <details id="canva-container">
-                    <summary>Aperçu :</summary>
-                    <div id="canva">
+              <label for="input-form-global-size" id="input-form-global-size">
+                Taille de la police
+                <span id="input-form-global-size-value"></span>:
+              </label>
 
-                    </div>
-                    <div class="grid">
-                        <div></div>
-                        <label for="input-form-global-color" id="input-form-global-color">
-                            Couleur de la police (Déf : #FFFFFF)
-                        </label>
+              <label for="input-form-global-bold" id="input-form-global-bold">
+                Gras
+              </label>
 
-                        <label for="input-form-global-size" id="input-form-global-size">
-                            Taille de la police <span id="input-form-global-size-value"></span>:
-                        </label>
-                        
-                        <label for="input-form-global-bold" id="input-form-global-bold">
-                            Gras
-                        </label>
-                        
-                        <label for="input-form-global-italic" id="input-form-global-italic">
-                            Italique
-                        </label>
-                        
-                    </div>
-                    <div class="grid">
-                        <div></div>
-                        <div>
-                            <button onclick="downloadPreview()"><i class="fa-solid fa-download"></i> &nbsp;
-                                Télécharger l'aperçu</button>
-                        </div>
-                        <div></div>
-                    </div>
+              <label
+                for="input-form-global-italic"
+                id="input-form-global-italic"
+              >
+                Italique
+              </label>
+            </div>
+            <div class="grid">
+              <div></div>
+              <div>
+                <button onclick="downloadPreview()">
+                  <i class="fa-solid fa-download"></i> &nbsp; Télécharger
+                  l'aperçu
+                </button>
+              </div>
+              <div></div>
+            </div>
 
-                    <details>
-                        <summary>Paramètres Avancés</summary>
-                        <h4>Prénom NOM</h4>
-                        <div class="grid">
-                            <label for="input-form-name-x" id="input-form-name-x">
-                                Axe X <span id="input-form-name-x-value"></span>:
-                            </label>
-                            <label for="input-form-name-y" id="input-form-name-y">
-                                Axe Y <span id="input-form-name-y-value"></span>:
-                            </label>
-                            <label for="input-form-name-size" id="input-form-name-size">
-                                Taille <span id="input-form-name-size-value"></span>:
-                            </label>
-                        </div>
-                        <div class="grid">
-                            <label for="input-form-name-color" id="input-form-name-color">
-                                Couleur (Déf : #FFF)
-                            </label>
-                            <label for="input-form-name-bold" id="input-form-name-bold">
-                                Gras 
-                            </label>
-                            <label for="input-form-name-italic" id="input-form-name-italic">
-                                Italique
-                            </label>
-                        </div>
+            <details>
+              <summary>Paramètres Avancés</summary>
+              <h4>Prénom NOM</h4>
+              <div class="grid">
+                <label for="input-form-name-x" id="input-form-name-x">
+                  Axe X <span id="input-form-name-x-value"></span>:
+                </label>
+                <label for="input-form-name-y" id="input-form-name-y">
+                  Axe Y <span id="input-form-name-y-value"></span>:
+                </label>
+                <label for="input-form-name-size" id="input-form-name-size">
+                  Taille <span id="input-form-name-size-value"></span>:
+                </label>
+              </div>
+              <div class="grid">
+                <label for="input-form-name-color" id="input-form-name-color">
+                  Couleur (Déf : #FFF)
+                </label>
+                <label for="input-form-name-bold" id="input-form-name-bold">
+                  Gras
+                </label>
+                <label for="input-form-name-italic" id="input-form-name-italic">
+                  Italique
+                </label>
+              </div>
 
+              <h4>Quota</h4>
+              <div class="grid">
+                <label for="input-form-quota-x" id="input-form-quota-x">
+                  Axe X <span id="input-form-quota-x-value"></span>:
+                </label>
+                <label for="input-form-quota-y" id="input-form-quota-y">
+                  Axe Y <span id="input-form-quota-y-value"></span>:
+                </label>
+                <label for="input-form-quota-size" id="input-form-quota-size">
+                  Taille <span id="input-form-quota-size-value"></span>:
+                </label>
+              </div>
+              <div class="grid">
+                <label for="input-form-quota-color" id="input-form-quota-color">
+                  Couleur (Déf : #FFF)
+                </label>
+                <label for="input-form-quota-bold" id="input-form-quota-bold">
+                  Gras
+                </label>
+                <label
+                  for="input-form-quota-italic"
+                  id="input-form-quota-italic"
+                >
+                  Italique
+                </label>
+              </div>
 
-                        <h4>Quota</h4>
-                        <div class="grid">
-                            <label for="input-form-quota-x" id="input-form-quota-x">
-                                Axe X <span id="input-form-quota-x-value"></span>:
-                            </label>
-                            <label for="input-form-quota-y" id="input-form-quota-y">
-                                Axe Y <span id="input-form-quota-y-value"></span>:
-                            </label>
-                            <label for="input-form-quota-size" id="input-form-quota-size">
-                                Taille <span id="input-form-quota-size-value"></span>:
-                            </label>
-                        </div>
-                        <div class="grid">
-                            <label for="input-form-quota-color" id="input-form-quota-color">
-                                Couleur (Déf : #FFF)
-                            </label>
-                            <label for="input-form-quota-bold" id="input-form-quota-bold">
-                                Gras 
-                            </label>
-                            <label for="input-form-quota-italic" id="input-form-quota-italic">
-                                Italique
-                            </label>
-                        </div>
+              <h4>Rôle</h4>
+              <div class="grid">
+                <label for="input-form-role-x" id="input-form-role-x">
+                  Axe X <span id="input-form-role-x-value"></span>:
+                </label>
+                <label for="input-form-role-y" id="input-form-role-y">
+                  Axe Y <span id="input-form-role-y-value"></span>:
+                </label>
+                <label for="input-form-role-size" id="input-form-role-size">
+                  Taille <span id="input-form-role-size-value"></span>:
+                </label>
+              </div>
+              <div class="grid">
+                <label for="input-form-role-color" id="input-form-role-color">
+                  Couleur (Déf : #FFF)
+                </label>
+                <label for="input-form-role-bold" id="input-form-role-bold">
+                  Gras
+                </label>
+                <label for="input-form-role-italic" id="input-form-role-italic">
+                  Italique
+                </label>
+              </div>
 
-                        <h4>Rôle</h4>
-                        <div class="grid">
-                            <label for="input-form-role-x" id="input-form-role-x">
-                                Axe X <span id="input-form-role-x-value"></span>:
-                            </label>
-                            <label for="input-form-role-y" id="input-form-role-y">
-                                Axe Y <span id="input-form-role-y-value"></span>: 
-                            </label>
-                            <label for="input-form-role-size" id="input-form-role-size">
-                                Taille <span id="input-form-role-size-value"></span>:
-                            </label>
-                        </div>
-                        <div class="grid">
-                            <label for="input-form-role-color" id="input-form-role-color">
-                                Couleur (Déf : #FFF)
-                            </label>
-                            <label for="input-form-role-bold" id="input-form-role-bold">
-                                Gras 
-                            </label>
-                            <label for="input-form-role-italic" id="input-form-role-italic">
-                                Italique
-                            </label>
-                        </div>
+              <h4>Equipe</h4>
+              <div class="grid">
+                <label for="input-form-team-x" id="input-form-team-x">
+                  Axe X <span id="input-form-team-x-value"></span>:
+                </label>
+                <label for="input-form-team-y" id="input-form-team-y">
+                  Axe Y <span id="input-form-team-y-value"></span>:
+                </label>
+                <label for="input-form-team-size" id="input-form-team-size">
+                  Taille <span id="input-form-team-size-value"></span>:
+                </label>
+              </div>
+              <div class="grid">
+                <label for="input-form-team-color" id="input-form-team-color">
+                  Couleur (Déf : #FFF)
+                </label>
+                <label for="input-form-team-bold" id="input-form-team-bold">
+                  Gras
+                </label>
+                <label for="input-form-team-italic" id="input-form-team-italic">
+                  Italique
+                </label>
+              </div>
+              <div class="settings-actions">
+                <button onclick="saveAllSettings()">
+                  Sauvegarder les paramètres
+                </button>
+                <button onclick="clearAllSettings()">
+                  Réinitialiser les paramètres
+                </button>
+                <button onclick="exportSettingsToFile()">
+                  Exporter les paramètres
+                </button>
+              </div>
+              <label>
+                Importer des paramètres
+                <input
+                  type="file"
+                  id="fileInput"
+                  onchange="importSettingsFromFile(event)"
+                  placeholder="Importer les paramètres"
+                />
+              </label>
+            </details>
+          </details>
 
-                        
-                        <h4>Equipe</h4>
-                        <div class="grid">
-                            <label for="input-form-team-x" id="input-form-team-x">
-                                Axe X <span id="input-form-team-x-value"></span>:
-                            </label>
-                            <label for="input-form-team-y" id="input-form-team-y">
-                                Axe Y <span id="input-form-team-y-value"></span>:
-                            </label>
-                            <label for="input-form-team-size" id="input-form-team-size">
-                                Taille <span id="input-form-team-size-value"></span>:
-                            </label>
-                        </div>
-                        <div class="grid">
-                            <label for="input-form-team-color" id="input-form-team-color">
-                                Couleur (Déf : #FFF)
-                            </label>
-                            <label for="input-form-team-bold" id="input-form-team-bold">
-                                Gras 
-                            </label>
-                            <label for="input-form-team-italic" id="input-form-team-italic">
-                                Italique
-                            </label>
-                        </div>
-                    </details>
-                </details>
+          <details id="database-container">
+            <summary>Données :</summary>
+            <table>
+              <thead>
+                <td>N°</td>
+                <td>Nom</td>
+                <td>Prénom</td>
+                <td>Association</td>
+                <td>Poste</td>
+                <td>Actions</td>
+              </thead>
+              <tbody id="database"></tbody>
+            </table>
+          </details>
 
-                <details id="database-container">
-                    <summary>Données :</summary>
-                    <table>
-                        <thead>
-                            <td>N°</td>
-                            <td>Nom</td>
-                            <td>Prénom</td>
-                            <td>Association</td>
-                            <td>Poste</td>
-                            <td>Actions</td>
-                        </thead>
-                        <tbody id="database"></tbody>
-                    </table>
-                </details>
-
-                <div class="grid">
-                    <div></div>
-                    <div>
-                        <button id="download_button" type="button" onclick="downloadNecklace()" disabled><i
-                                class="fa-solid fa-gears"></i> &nbsp;
-                            GÉNÉRER</button>
-                    </div>
-                    <div></div>
-                </div>
-            </section>
-        </main>
+          <div class="grid">
+            <div></div>
+            <div>
+              <button
+                id="download_button"
+                type="button"
+                onclick="downloadNecklace()"
+                disabled
+              >
+                <i class="fa-solid fa-gears"></i> &nbsp; GÉNÉRER
+              </button>
+            </div>
+            <div></div>
+          </div>
+        </section>
+      </main>
     </div>
     <script src="./js/necklace_generator.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-</body>
-
+  </body>
 </html>
