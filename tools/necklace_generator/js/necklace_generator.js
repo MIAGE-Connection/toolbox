@@ -1,46 +1,144 @@
-let cvn, template_input, data_input, separator_input, template, data, previewItem;
-let global_color_picker, global_size_slider, global_bold_checkbox, global_italic_checkbox;
-let input_name_settings, input_quota_settings, input_role_settings, input_team_settings;
-let SCALING_FACTOR = 2, TEMPLATE_WIDTH = 2000, TEMPLATE_HEIGHT = 1336;
+let cvn;
+let template_input;
+let data_input;
+let separator_input;
+let template;
+let data;
+let previewItem;
+
+let global_color_picker;
+let global_size_slider;
+let global_bold_checkbox;
+let global_italic_checkbox;
+
+let input_name_settings;
+let input_quota_settings;
+let input_role_settings;
+let input_team_settings;
+
+let SCALING_FACTOR = 2;
+let TEMPLATE_WIDTH = 2000;
+let TEMPLATE_HEIGHT = 1336;
 
 const defaultSettings = {
-  name: { x: 315, y: 301, size: 24, color: "#FFFFFF", bold: true, italic: false },
-  quota: { x: 315, y: 347, size: 18, color: "#FFFFFF", bold: false, italic: false },
-  role: { x: 315, y: 394, size: 18, color: "#FFFFFF", bold: false, italic: true },
-  team: { x: 912, y: 432, size: 18, color: "#2b309b", bold: false, italic: false },
+  name: {
+    x: 315,
+    y: 301,
+    size: 24,
+    color: "#FFFFFF",
+    bold: true,
+    italic: false,
+  },
+  quota: {
+    x: 315,
+    y: 347,
+    size: 18,
+    color: "#FFFFFF",
+    bold: false,
+    italic: false,
+  },
+  role: {
+    x: 315,
+    y: 394,
+    size: 18,
+    color: "#FFFFFF",
+    bold: false,
+    italic: true,
+  },
+  team: {
+    x: 912,
+    y: 432,
+    size: 18,
+    color: "#2b309b",
+    bold: false,
+    italic: false,
+  },
 };
 
 class LineSettings {
   constructor(name, x, y) {
     this.name = name;
     this.x_slider = createSlider(0, 1000, x);
+    this.x_slider.input(() => {
+      this.saveSettings();
+      this.UpdateValueDisplayed(this.x_slider, "x");
+    });
+    this.x_slider.parent("input-form-" + name + "-x");
     this.y_slider = createSlider(0, 668, y);
+    this.y_slider.input(() => {
+      this.saveSettings();
+      this.UpdateValueDisplayed(this.y_slider, "y");
+    });
+    this.y_slider.parent("input-form-" + name + "-y");
     this.size_slider = createSlider(0, 100, 30);
+    this.size_slider.input(() => {
+      this.saveSettings();
+      this.UpdateValueDisplayed(this.size_slider, "size");
+    });
+    this.size_slider.parent("input-form-" + name + "-size");
     this.color_picker = createColorPicker("#FFFFFF");
+    this.color_picker.parent("input-form-" + name + "-color");
     this.bold_checkbox = createCheckbox();
+    this.bold_checkbox.parent("input-form-" + name + "-bold");
     this.italic_checkbox = createCheckbox();
-
-    this.setupEventHandlers();
+    this.italic_checkbox.parent("input-form-" + name + "-italic");
   }
 
-  setupEventHandlers() {
-    this.x_slider.input(() => { this.saveSettings(); this.updateValueDisplayed("x"); });
-    this.y_slider.input(() => { this.saveSettings(); this.updateValueDisplayed("y"); });
-    this.size_slider.input(() => { this.saveSettings(); this.updateValueDisplayed("size"); });
-    this.bold_checkbox.changed(() => { this.saveSettings(); });
-    this.italic_checkbox.changed(() => { this.saveSettings(); });
-
-    this.x_slider.parent(`input-form-${this.name}-x`);
-    this.y_slider.parent(`input-form-${this.name}-y`);
-    this.size_slider.parent(`input-form-${this.name}-size`);
-    this.color_picker.parent(`input-form-${this.name}-color`);
-    this.bold_checkbox.parent(`input-form-${this.name}-bold`);
-    this.italic_checkbox.parent(`input-form-${this.name}-italic`);
+  UpdateValueDisplayed(slider, slider_name) {
+    let value = document.getElementById(
+      "input-form-" + this.name + "-" + slider_name + "-value"
+    );
+    value.innerText = " [" + slider.value() + "] ";
   }
 
-  updateValueDisplayed(slider_name) {
-    let value = document.getElementById(`input-form-${this.name}-${slider_name}-value`);
-    value.innerText = ` [${this[`${slider_name}_slider`].value()}] `;
+  x() {
+    return this.x_slider.value();
+  }
+
+  setX(nX) {
+    this.x_slider.value = nX;
+  }
+
+  y() {
+    return this.y_slider.value();
+  }
+
+  setY(nY) {
+    this.y_slider.value = nY;
+  }
+
+  size() {
+    return this.size_slider.value();
+  }
+
+  setSize(nsize) {
+    this.size_slider.value(nsize);
+  }
+
+  color() {
+    return this.color_picker.value();
+  }
+
+  setColor(ncolor) {
+    this.color_picker.value(ncolor);
+  }
+
+  style() {
+    if (this.bold_checkbox.checked())
+      if (this.italic_checkbox.checked()) return BOLDITALIC;
+      else return BOLD;
+
+    if (this.italic_checkbox.checked()) return ITALIC;
+
+    return NORMAL;
+  }
+
+  setBold(nvalue) {
+    this.bold_checkbox.checked(nvalue);
+  }
+
+  setItalic(nvalue) {
+    this.italic_checkbox.checked(nvalue);
   }
 
   saveSettings() {
@@ -52,44 +150,41 @@ class LineSettings {
       bold: this.bold_checkbox.checked(),
       italic: this.italic_checkbox.checked(),
     };
-    localStorage.setItem(`${this.name}_settings`, JSON.stringify(settings));
+    localStorage.setItem(this.name + "_settings", JSON.stringify(settings));
   }
 
   loadSettings() {
-    const settings = JSON.parse(localStorage.getItem(`${this.name}_settings`)) ?? defaultSettings[this.name];
+    const settings =
+      JSON.parse(localStorage.getItem(this.name + "_settings")) ??
+      defaultSettings;
     if (settings) {
+      // Update slider values and trigger input event to refresh UI
       this.x_slider.value(settings.x);
+      this.x_slider.elt.dispatchEvent(new Event("input"));
+
       this.y_slider.value(settings.y);
+      this.y_slider.elt.dispatchEvent(new Event("input"));
+
       this.size_slider.value(settings.size);
+      this.size_slider.elt.dispatchEvent(new Event("input"));
+
+      // Update color picker value and trigger input event
       this.color_picker.value(settings.color);
+      this.color_picker.elt.dispatchEvent(new Event("input"));
+
+      // Update checkboxes and trigger change event
       this.bold_checkbox.checked(settings.bold);
+      this.bold_checkbox.elt.dispatchEvent(new Event("change"));
+
       this.italic_checkbox.checked(settings.italic);
-      this.updateValueDisplayed("x");
-      this.updateValueDisplayed("y");
-      this.updateValueDisplayed("size");
+      this.italic_checkbox.elt.dispatchEvent(new Event("change"));
+
+      // Update displayed values next to sliders if you have any
+      this.UpdateValueDisplayed(this.x_slider, "x");
+      this.UpdateValueDisplayed(this.y_slider, "y");
+      this.UpdateValueDisplayed(this.size_slider, "size");
     }
   }
-
-  // Getter and Setter methods for x, y, size, color, and style
-  x() { return this.x_slider.value(); }
-  setX(nX) { this.x_slider.value(nX); }
-
-  y() { return this.y_slider.value(); }
-  setY(nY) { this.y_slider.value(nY); }
-
-  size() { return this.size_slider.value(); }
-  setSize(nsize) { this.size_slider.value(nsize); }
-
-  color() { return this.color_picker.value(); }
-  setColor(ncolor) { this.color_picker.value(ncolor); }
-
-  style() {
-    if (this.bold_checkbox.checked()) return this.italic_checkbox.checked() ? BOLDITALIC : BOLD;
-    return this.italic_checkbox.checked() ? ITALIC : NORMAL;
-  }
-
-  setBold(nvalue) { this.bold_checkbox.checked(nvalue); }
-  setItalic(nvalue) { this.italic_checkbox.checked(nvalue); }
 }
 
 function setup() {
@@ -99,14 +194,10 @@ function setup() {
 function createCanva(width, height) {
   let cvn_node = document.getElementById("canva-container");
   cvn_node.style.display = "block";
-
-  let cvn = createCanvas(width / SCALING_FACTOR, height / SCALING_FACTOR);
-  
-  cvn.id("canvas");
-
-  cvn.parent("canva-container");
+  cvn = createCanvas(width / SCALING_FACTOR, height / SCALING_FACTOR);
+  cvn.id("previewCanvas");
+  cvn.parent("canva");
 }
-
 
 function createForm() {
   template_input = createFileInput(handleTemplateFile);
@@ -165,7 +256,9 @@ function saveAllSettings() {
 
 function clearAllSettings() {
   localStorage.clear();
-  alert("Les paramètres ont été réinitialisés avec succès ! La page va se recharger afin d'appliquer les changements..");
+  alert(
+    "Les paramètres ont été réinitialisés avec succès ! La page va se recharger afin d'appliquer les changements.."
+  );
   location.reload();
 }
 
@@ -178,7 +271,9 @@ function exportSettingsToFile() {
   };
 
   if (Object.values(settings).every((value) => value === null)) {
-    alert("Aucun paramètre à exporter ! Veuillez sauvegarder des paramètres avant de continuer.");
+    alert(
+      "Aucun paramètre à exporter ! Veuillez sauvegarder des paramètres avant de continuer."
+    );
     return;
   }
 
@@ -203,17 +298,20 @@ function importSettingsFromFile(event) {
           loadSettingsToApp(settings[key], key);
         });
       }
-      alert("Paramètres importés avec succès ! La page va se recharger afin d'appliquer les changements..");
+      alert(
+        "Paramètres importés avec succès ! La page va se recharger afin d'appliquer les changements.."
+      );
     };
     reader.readAsText(file);
 
+    // Reload to update UI with new settings
     location.reload();
   }
 }
 
 function loadSettingsToApp(settings, key) {
   if (!settings) return;
-  const storageKey = `${key}_settings`;
+  const storageKey = key + "_settings";
 
   localStorage.setItem(storageKey, JSON.stringify(settings));
 
@@ -250,8 +348,10 @@ function updateLineSettings() {
   input_team_settings.setBold(global_bold_checkbox.checked());
   input_team_settings.setItalic(global_italic_checkbox.checked());
 
-  let global_size_value = document.getElementById("input-form-global-size-value");
-  global_size_value.innerText = ` [${global_size_slider.value()}] `;
+  let global_size_value = document.getElementById(
+    "input-form-global-size-value"
+  );
+  global_size_value.innerText = " [" + global_size_slider.value() + "] ";
 }
 
 function draw() {
@@ -260,34 +360,18 @@ function draw() {
 
 function renderPreview() {
   if (template) {
-    image(template, 0, 0, TEMPLATE_WIDTH / SCALING_FACTOR, TEMPLATE_HEIGHT / SCALING_FACTOR);
+    image(
+      template,
+      0,
+      0,
+      TEMPLATE_WIDTH / SCALING_FACTOR,
+      TEMPLATE_HEIGHT / SCALING_FACTOR
+    );
   }
 
   if (previewItem) {
     renderPreviewItem(previewItem);
   }
-}
-
-function renderPreviewItem(item) {
-  textSize(input_name_settings.size());
-  textStyle(input_name_settings.style());
-  fill(input_name_settings.color());
-  text(item.name, input_name_settings.x(), input_name_settings.y());
-
-  textSize(input_quota_settings.size());
-  textStyle(input_quota_settings.style());
-  fill(input_quota_settings.color());
-  text(item.quota, input_quota_settings.x(), input_quota_settings.y());
-
-  textSize(input_role_settings.size());
-  textStyle(input_role_settings.style());
-  fill(input_role_settings.color());
-  text(item.role, input_role_settings.x(), input_role_settings.y());
-
-  textSize(input_team_settings.size());
-  textStyle(input_team_settings.style());
-  fill(input_team_settings.color());
-  text(item.team, input_team_settings.x(), input_team_settings.y());
 }
 
 function handleTemplateFile(file) {
@@ -352,7 +436,7 @@ function createDisplayAction(elementIndex) {
   action.style.margin = "3%";
   action.style.cursor = "pointer";
   action.innerHTML = '<i class="fa-solid fa-eye"></i>';
-  action.onclick = function () {
+  action.onclick = function (event) {
     previewDataIndex(elementIndex);
   };
   return action;
@@ -364,7 +448,7 @@ function createDownloadAction(elementIndex) {
   action.style.cursor = "pointer";
   action.name = "download-people";
   action.innerHTML = '<i class="fa-solid fa-download"></i>';
-  action.onclick = function () {
+  action.onclick = function (event) {
     previewDataIndex(elementIndex);
     downloadPreview(data[elementIndex]);
   };
@@ -376,7 +460,7 @@ function createRemoveAction(elementIndex) {
   action.style.margin = "3%";
   action.style.cursor = "pointer";
   action.innerHTML = '<i class="fa-solid fa-trash"></i>';
-  action.onclick = function () {
+  action.onclick = function (event) {
     data.splice(elementIndex, 1);
     let database = document.getElementById("database");
     database.innerHTML = "";
@@ -386,8 +470,8 @@ function createRemoveAction(elementIndex) {
 }
 
 function csvToArray(str) {
-  const delimiter = separator_input.value();
-  alert(`${delimiter} will be used as CSV separator`);
+  delimiter = separator_input.value();
+  alert(delimiter + " will be used as CSV separator");
 
   const headers = str.slice(0, str.indexOf("\n")).split(delimiter);
   const rows = str.slice(str.indexOf("\n") + 1).split("\n");
@@ -399,60 +483,68 @@ function csvToArray(str) {
     }, {});
     return el;
   });
-
   return arr;
 }
 
-
-function downloadNecklace() {
-  const canvas = document.getElementById('canvas'); 
-  
-  if (canvas) {
-    console.log('hello', canvas)
-    const dataURL = canvas.toDataURL("image/png");
-
-    const link = document.createElement('a');
-    link.href = dataURL;
-    link.download = 'necklace_design.png';
-
-    link.click();
-  } else {
-    console.error("Canvas not found or is empty.");
-  }
+function renderPreviewItem() {
+  textAlign(CENTER);
+  renderLine(previewItem.Prenom + " " + previewItem.Nom, input_name_settings);
+  renderLine(previewItem.Quota, input_quota_settings);
+  renderLine(previewItem.Role, input_role_settings);
+  renderLine(previewItem.Equipe, input_team_settings);
 }
+
+function renderLine(text_value, line_settings) {
+  fill(line_settings.color());
+  textStyle(line_settings.style());
+  textSize(line_settings.size());
+  text(text_value, line_settings.x(), line_settings.y());
+}
+
+function getFirstRowFilename() {
+  if (previewItem)
+    return previewItem.Quota + "_" + previewItem.Nom + "_" + previewItem.Prenom;
+  else return "preview";
+}
+
+function renderPreviewAndDownload(element) {
+  previewItem = element;
+  downloadPreview();
+}
+
 let downloadQueue = [];
 
 function downloadNecklace() {
-    for (let i = 0; i < data.length; i++) {
-      downloadQueue.push(i);
-    }
-    startDownloadQueue();
- 
+  for (let i = 0; i < data.length; i++) {
+    downloadQueue.push(i);
+  }
+  startDownloadQueue();
 }
 
 function startDownloadQueue() {
   if (downloadQueue.length === 0) {
-    alert('All files have been downloaded.');
+    alert("All files have been downloaded.");
     return;
   }
 
   const index = downloadQueue.shift();
   previewItem = data[index];
-  
+
   renderPreview();
-  
+
   setTimeout(() => {
     downloadPreview(previewItem, index);
-    startDownloadQueue(); 
+    startDownloadQueue();
   }, 500);
 }
 
 function downloadPreview(_, index) {
-  const canvas = document.getElementById('canvas');
+  const canvas = document.getElementById("previewCanvas");
+  console.log("#### ~ canvas:", canvas);
 
   if (canvas) {
     const dataURL = canvas.toDataURL("image/png");
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = dataURL;
     link.download = `necklace_design_${index + 1}.png`;
 
